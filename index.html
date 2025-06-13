@@ -4,8 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grow a Garden Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0iIzJhNmRmZiIvPgogICAgPHBhdGggZD0iTTE2IDhjLTQuNCAwLTggMy42LTggOCAwIDQuNCAzLjYgOCA4IDhzOC0zLjYgOC04YzAtNC40LTMuNi04LTgtOHptMCAxNGMtMy4zIDAtNi0yLjctNi02czIuNy02IDYtNiA2IDIuNyA2IDYtMi43IDYtNiA2eiIgZmlsbD0iI2ZmZmZmZiIvPgogICAgPHBhdGggZD0iTTE2IDRjLTEuMSAwLTIgLjktMiAycy45IDIgMiAyIDItLjkgMi0yLS45LTItMi0yem0wIDIwYy0xLjEgMC0yIC45LTIgMnMuOSAyIDIgMiAyLS45IDItMi0uOS0yLTItMnoiIGZpbGw9IiNGRkZGRkYiLz4KPC9zdmc+">
+    <style>
+        :root {
+            --primary-blue: #2a6dff;
+            --light-blue: #e8f1ff;
+            --white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-blue);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ffffff" d="M25,60 Q40,50 55,60 T85,60 Q85,70 75,70 T65,70 Q65,80 55,80 T45,80 Q35,80 35,70 T25,70 Q15,70 15,60 T25,60"/></svg>') repeat;
+            opacity: 0.3;
+            z-index: -1;
+            animation: cloudMove 60s linear infinite;
+        }
+
+        @keyframes cloudMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 0; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px var(--shadow);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .left-column, .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: fit-content;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--shadow);
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 0.5rem;
+        }
+
+        .stock-container {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--light-blue);
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .stock-item:hover {
+            transform: translateX(5px);
+        }
+
+        .stock-item span {
+            font-weight: 500;
+        }
+
+        .stock-item .amount {
+            color: var(--primary-blue);
+            font-weight: bold;
+            background: rgba(42, 109, 255, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        #weather-section .stock-item {
+            background: linear-gradient(135deg, var(--light-blue), #e3f2fd);
+        }
+
+        #weather-section .amount {
+            background: rgba(42, 109, 255, 0.15);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-column, .right-column {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+        }
+
+        #cosmetic-section {
+            max-width: 580px;
+            margin: 2rem auto;
+        }
+    </style>
 </head>
 <body>
     <div class="clouds"></div>
@@ -47,6 +207,65 @@
             </section>
         </main>
     </div>
-    <script src="script.js"></script>
+    <script>
+        // API endpoint configuration
+        const API_ENDPOINT = '/api/stock'; // Update this with your actual API endpoint
+
+        // Function to update stock display
+        function updateStockDisplay(containerId, data) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            for (const [name, item] of Object.entries(data)) {
+                const stockItem = document.createElement('div');
+                stockItem.className = 'stock-item';
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = item.EggName || name;
+                
+                const amountSpan = document.createElement('span');
+                amountSpan.className = 'amount';
+                amountSpan.textContent = `x${item.Stock}`;
+                
+                stockItem.appendChild(nameSpan);
+                stockItem.appendChild(amountSpan);
+                container.appendChild(stockItem);
+            }
+        }
+
+        // Function to update weather display
+        function updateWeatherDisplay(data) {
+            const container = document.getElementById('weather-container');
+            container.innerHTML = `
+                <div class="stock-item">
+                    <span>${data.event}</span>
+                    <span class="amount">Ends: ${new Date(data.endTime * 1000).toLocaleString()}</span>
+                </div>
+            `;
+        }
+
+        // Function to fetch and update all data
+        async function updateAllData() {
+            try {
+                const response = await fetch(API_ENDPOINT);
+                const data = await response.json();
+
+                // Update each section
+                if (data.seeds) updateStockDisplay('seeds-container', data.seeds);
+                if (data.eggs) updateStockDisplay('eggs-container', data.eggs);
+                if (data.gear) updateStockDisplay('gear-container', data.gear);
+                if (data.cosmetic) updateStockDisplay('cosmetic-container', data.cosmetic);
+                if (data.weather) updateWeatherDisplay(data.weather);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Update data every 30 seconds
+        setInterval(updateAllData, 30000);
+
+        // Initial data load
+        updateAllData();
+    </script>
 </body>
 </html> 
